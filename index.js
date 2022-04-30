@@ -2,7 +2,7 @@
 const minimist = require("minimist")
 const args = minimist(process.argv.slice(2))
 console.log(args)
-app.use(express.static('./public'));
+
 const help = (`
 server.js [options]
 
@@ -27,14 +27,16 @@ if (args.help || args.h) {
 const express = require('express')
 
 const app = express()
+app.use(express.static('./public'));
 const db = require("./src/services/database.js")
 const fs = require('fs')
 const morgan = require('morgan')
 var md5 = require("md5")
+const cors = require("cors")
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
-
+app.use(cors())
 
 
 const port = args.port || 5000
@@ -95,7 +97,7 @@ if(args.debug){
 app.get('/app/',(req,res, next) => {
    
     res.json({"message":"your API works! (200)"});
-    res.status(200).end('200 OK')
+    res.status(200) //.end("200 OK")
 })
 // BELOW THIS POINT THE USER FUNCTIONS ARENT NEEDED
 app.post("/app/new/user",(req,res,next) => {
@@ -148,10 +150,7 @@ app.delete("/app/delete/user/:id", (req, res) => {
   res.status(200).json(info)
 });
 // Default response for any other request
-app.use(function(req, res){
-res.json({"message":"Endpoint not found. (404)"});
-  res.status(404);
-});
+
 
 
 
@@ -183,11 +182,11 @@ app.get('/app/flips/:number/',(req,res) =>{
      }
         
 
-app.get('/app/flip/',(req,res, next) =>{
-  res.setHeader("showing", "alex")
+app.get('/app/flip/',(req,res) =>{
+  
 var flip = coinFlip()//need to create coinFlip above
-res.status(200).json({'flip': flip})
-res.type("text/plain")
+res.status(200).json( {flip})
+
 })
 
 //lol
@@ -206,7 +205,10 @@ res.status(200).json(flipACoin(flipTails))
 res.type("text/plain")
 })
 
-
+app.use(function(req, res){
+  res.json({"message":"Endpoint not found. (404)"});
+    res.status(404);
+  });
 
 function countFlips(array) {
     
