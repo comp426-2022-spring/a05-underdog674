@@ -6,6 +6,9 @@
 // Enter number and press button to activate coin flip series
 
 // Guess a flip by clicking either heads or tails button
+
+//I followed your guide and found the comments very informative and would recommend  keeping that for the future because it's helps those who are really
+//lost to finish the assignment while also learning the material
 const coin = document.getElementById("coin")
 
 coin.addEventListener("click", flipCoin)
@@ -13,13 +16,13 @@ coin.addEventListener("click", flipCoin)
 async function flipCoin(){
 const endpoint = "app/flip/"
 const url = document.baseURI+endpoint
-await fetch(url)
+await fetch(url) //gets the url
 .then(function(response){
     return response.json();
 })
     .then(function(result){
         console.log(result);
-        document.getElementById("result").innerHTML = result.flip;
+        document.getElementById("result").innerHTML = result.flip; //result of the flip on the link
         document.getElementById("quarter").setAttribute("src","assets/img/"+result.flip+".png");
 
     });
@@ -36,7 +39,7 @@ async function flipCoins(event){
         const formData = new FormData(formEvent);
         const flips = await sendFlips({url, formData});
         console.log(flips);
-        document.getElementById("heads").innerHTML = "Heads: "+flips.summary.heads;
+        document.getElementById("heads").innerHTML = "Heads: "+flips.summary.heads;// these set up my flip counts for heads and tails
 		document.getElementById("tails").innerHTML = "Tails: "+flips.summary.tails;
         document.getElementById("coinlist").innerHTML = coinList(flips.raw);
     }
